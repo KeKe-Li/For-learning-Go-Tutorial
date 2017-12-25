@@ -16,7 +16,7 @@ func main() {
     fmt.Println(!true)
 }
 ```
-
+打印输出:
 ```go
 $ go run values.go
 golang
@@ -26,5 +26,5 @@ false
 true
 false
 ```
-
+这是最基本的语法，相信通过这个简单的例子大家已经初步对Go语言由了基本认识，那接下来开启Go的世界！
 
