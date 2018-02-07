@@ -16,6 +16,7 @@
 
 Go语言的官方编译器被称为gc,包括编译工具5g,6g.8g，链接工具51,61和81以及文档查看工具godoc.
 学习一门语言最好的方式就是去实践，那么我们就从go的例子开始实践吧！
+
 * [例子入门](https://github.com/KeKe-Li/For-learning-Go-Tutorial/blob/master/src/example/EX.md)
 * [数据类型]()
 * [接口]()
