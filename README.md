@@ -33,3 +33,6 @@ Go语言的官方编译器被称为gc,包括编译工具5g,6g.8g，链接工具5
 * [Go编程标准和规范]()
 
 
+
+### License
+This is free software distributed under the terms of the MIT license
