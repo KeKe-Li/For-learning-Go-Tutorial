@@ -23,7 +23,11 @@ Go语言的官方编译器被称为gc,包括编译工具5g,6g.8g，链接工具5
 
 * [例子入门](https://github.com/KeKe-Li/For-learning-Go-Tutorial/blob/master/src/example/EX.md)
 * [数据类型]()
-* [接口]()
+* [函数]()
+* [数组与切片]()
+* [map]()
+* [结构(struct)与方法(method)]()
+* [接口(Interfaces)与反射(reflection)]()
 * [并发处理]()
 * [Go包处理]()
 * [Go编程标准和规范]()
