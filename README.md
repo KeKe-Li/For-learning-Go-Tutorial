@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-<img width="100" align="center" src="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-keke-green.svg" />
+<img width="100" height="100" align="center" src="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-keke-green.svg" />
 </p>
 
 学习Go语言需要去了解Go的特性，然后在深入的去实践，如果你想使用Go语言写出Go味道的程序，那么你就需要付出努力去实践了！
