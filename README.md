@@ -9,7 +9,7 @@
 <p align='center'>
 <img src="https://img.shields.io/badge/build-passing-brightgreen.svg">
 <a href="https://twitter.com/perfactsen"><img src="https://img.shields.io/badge/twitter-keke-green.svg"></a>
-<a href="https://www.zhihu.com/people/sencoed.com/activities"><img src="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-keke-green.svg?style=flat&colorA=ed6f59"></a>
+<a href="https://www.zhihu.com/people/sencoed.com/activities"><img src="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-keke-green.svg?style=flat&colorA=blue"></a>
 </p>
 
 学习Go语言需要去了解Go的特性，然后在深入的去实践，如果你想使用Go语言写出Go味道的程序，那么你就需要付出努力去实践了！
