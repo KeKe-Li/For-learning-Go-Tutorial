@@ -5,9 +5,6 @@
 <img width="100%" align="center" src="src/images/1.jpg" />
 </p>
 
-<p align="center">
-<img width="100" height="100" align="center" src="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-keke-green.svg" />
-</p>
 
 学习Go语言需要去了解Go的特性，然后在深入的去实践，如果你想使用Go语言写出Go味道的程序，那么你就需要付出努力去实践了！
 先来了解下Go语言为何创造出来的历史吧，Go 语言是由谷歌公司在 2007 年开始开发的一门语言，目的是能在多核心时代高效编写网络应用程序。Go 语言的创始人 Robert Griesemer、Rob Pike 和 Ken Thompson 都是在计算机发展过程中作出过重要贡献的人。
