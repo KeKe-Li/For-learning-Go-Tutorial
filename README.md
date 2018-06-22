@@ -46,7 +46,7 @@ Go语言的官方编译器被称为gc,包括编译工具5g,6g.8g，链接工具5
 * [反射(reflection)](https://github.com/KeKe-Li/For-learning-Go-Tutorial/blob/master/src/chapter07/01.0.md)
 * [通信协议解析](https://github.com/KeKe-Li/For-learning-Go-Tutorial/blob/master/src/chapter08/01.0.md)
 * [channel](https://github.com/KeKe-Li/For-learning-Go-Tutorial/blob/master/src/chapter09/01.0.md)
-* [并发处理](https://github.com/KeKe-Li/For-learning-Go-Tutorial/blob/master/src/chapter10/01.0.md)
+* [Goroutine并发处理](https://github.com/KeKe-Li/For-learning-Go-Tutorial/blob/master/src/chapter10/01.0.md)
 * [Go包处理](https://github.com/KeKe-Li/For-learning-Go-Tutorial/blob/master/src/chapter11/01.0.md)
 * [Grpc与Protobuf](https://github.com/KeKe-Li/For-learning-Go-Tutorial/blob/master/src/chapter12/01.0.md)
 * [微服务](https://github.com/KeKe-Li/For-learning-Go-Tutorial/blob/master/src/chapter13/01.0.md)
