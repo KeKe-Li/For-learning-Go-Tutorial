@@ -59,8 +59,13 @@ Go语言的官方编译器被称为gc,包括编译工具5g,6g.8g，链接工具5
 * [Go练习案例](https://github.com/KeKe-Li/For-learning-Go-Tutorial/blob/master/src/example/EX.0.2.md)
 ### golang编程
 
-觉得此文章不错，支持我的话可以给我star ，:star:！如果有问题可以加我的微信**Sen0676**,加入我们的交流群一起一起交流goalng技术！
-
+觉得此文章不错，支持我的话可以给我star ，:star:！如果有问题可以加我的微信,也可以加入我们的交流群一起交流goalng技术！
+<p align="center">
+<img width="300" align="center" src="src/images/https://github.com/KeKe-Li/micro-Services-Tutorial/blob/master/src/images/12.jpg
+" />
+ <img width="300" align="center" src="src/images/https://github.com/KeKe-Li/micro-Services-Tutorial/blob/master/src/images/13.jpg
+" />
+</p>
 
 ### License
 This is free software distributed under the terms of the MIT license
