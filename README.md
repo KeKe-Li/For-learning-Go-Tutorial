@@ -1,6 +1,5 @@
 ### For-learning-Go-Tutorial
 准备写一本Go的书针对初学者快速入门开发和使用go！
-
 <p align="center">
 <img width="100%" align="center" src="src/images/1.jpg" />
 </p>
