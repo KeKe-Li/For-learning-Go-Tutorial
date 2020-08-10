@@ -56,11 +56,13 @@ Go语言的官方编译器被称为gc,包括编译工具5g,6g.8g，链接工具5
 * [TiDB的使用](https://github.com/KeKe-Li/For-learning-Go-Tutorial/blob/master/src/chapter15/01.0.md)
 * [Go排序算法及其性能比较](https://github.com/KeKe-Li/For-learning-Go-Tutorial/blob/master/src/chapter16/01.0.md)
 * [Go程序测试](https://github.com/KeKe-Li/For-learning-Go-Tutorial/blob/master/src/chapter17/01.0.md)
+* [Sync.Map解析](https://github.com/KeKe-Li/For-learning-Go-Tutorial/blob/master/src/chapter18/01.0.md)
+* [Sync.WaitGroup解析](https://github.com/KeKe-Li/For-learning-Go-Tutorial/blob/master/src/chapter19/01.0.md)
+* [Go异步抢占式调度](https://github.com/KeKe-Li/For-learning-Go-Tutorial/blob/master/src/chapter20/01.0.md)
 * [Go编程标准和规范](https://github.com/KeKe-Li/For-learning-Go-Tutorial/blob/master/src/spec/01.0.md)
 * [Golang垃圾回收](https://github.com/KeKe-Li/For-learning-Go-Tutorial/blob/master/src/spec/02.0.md)
 * [Go练习案例](https://github.com/KeKe-Li/For-learning-Go-Tutorial/blob/master/src/example/EX.0.2.md)
-* [Sync.Map解析](https://github.com/KeKe-Li/For-learning-Go-Tutorial/blob/master/src/chapter18/01.0.md)
-* [Sync.WaitGroup解析](https://github.com/KeKe-Li/For-learning-Go-Tutorial/blob/master/src/chapter19/01.0.md)
+
 
 ### golang编程
 
