@@ -1,5 +1,6 @@
 ### For-learning-Go-Tutorial
 准备写一本Go的书针对初学者快速入门开发和使用go！
+
 <p align="center">
 <img width="100%" align="center" src="src/images/1.jpg" />
 </p>
@@ -36,6 +37,7 @@ Go是一种编译型语言，一种并发的、带垃圾回收的、快速编译
 代表语言：JavaScript、Python
 
 Go语言的官方编译器被称为gc,包括编译工具5g,6g.8g，链接工具51,61和81以及文档查看工具godoc.
+
 学习一门语言最好的方式就是去实践，那么我们就从go的例子开始实践吧！
 
 * [例子入门](https://github.com/KeKe-Li/For-learning-Go-Tutorial/blob/master/src/example/EX.0.1.md)
