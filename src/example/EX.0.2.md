@@ -24,6 +24,7 @@ GO 例子目录：
 * [Go 函数定义](#Go函数定义)
 * [Go 方法](#Go方法)
 * [Go 结构体](#Go结构体)
+* [Go Channel](#Channel)
 * [Go 闭包函数](#Go闭包函数)
 * [Go Defer函数]()
 * [Go 接口]()
@@ -99,6 +100,7 @@ dcl: [1 2 3 4 5]
 
 
 #### map
+
 map是Go语言内置的关联数据类型。因为数组是索引对应数组元素，而字典是键对应值。
 ```go
 package main
@@ -179,6 +181,7 @@ func main() {
 ```
 
 #### Go方法
+
 通常的函数定义叫做函数，定义在结构体上面的函数叫做该结构体的方法。
 从某种意义上说，方法是函数的“语法糖”。当函数与某个特定的类型绑定，那么它就是一个方法。也证因为如此，我们可以将方法“还原”成函数。
 ```go
@@ -229,3 +232,335 @@ area:  50
 perim: 30
 ```
 #### Go结构体
+
+#### Channel
+
+channel常用的10中操作:
+
+1. 使用for range读channel
+
+场景:当需要不断从channel读取数据时.
+
+使用for-range读取channel，这样既安全又便利，当channel关闭时，for循环会自动退出，无需主动监测channel是否关闭，可以防止读取已经关闭的channel，造成读到数据为通道所存储的数据类型的零值。
+
+```go
+for x := range ch{
+    fmt.Println(x)
+}
+```
+2. 使用v,ok := <-ch + select操作判断channel是否关闭
+
+场景:判断channel是否关闭.其中ok的含义是:
+```markdown
+true：读到通道数据，不确定是否关闭，可能channel还有保存的数据，但channel已关闭。
+false：通道关闭，无数据读到。
+```
+从关闭的channel读值读到是channel所传递数据类型的零值，这个零值有可能是发送者发送的，也可能是channel关闭了。
+
+情况1：当chanrecv返回(false,false)时，本质是select操作失败了，所以相关的case会阻塞，不会执行:
+
+```go
+func main() {
+	ch := make(chan int)
+	select {
+	case v, ok := <-ch:
+		fmt.Printf("v: %v, ok: %v\n", v, ok)
+	default:
+		fmt.Println("nothing")
+	}
+}
+```
+情况2：下面的结果会是零值和false：
+
+```go 
+func main() {
+	ch := make(chan int)
+	// 增加关闭
+	close(ch)
+
+	select {
+	case v, ok := <-ch:
+		fmt.Printf("v: %v, ok: %v\n", v, ok)
+	}
+}
+```
+
+向channel写数据然后关闭，依然可以从已关闭channel读到有效数据，但channel关闭且没有数据时，读不到有效数据，ok为false，可以确定当前channel已关闭。
+```go 
+func main() {
+	ch := make(chan int, 1)
+
+	// 发送1个数据关闭channel
+	ch <- 1
+	close(ch)
+	print("close channel\n")
+
+	// 不停读数据直到channel没有有效数据
+	for {
+		select {
+		case v, ok := <-ch:
+			print("v: ", v, ", ok:", ok, "\n")
+			if !ok {
+				print("channel is close\n")
+				return
+			}	
+		default:
+			print("nothing\n")
+		}
+	}
+}
+
+// 结果
+// close channel
+// v: 1, ok:true
+// v: 0, ok:false
+// channel is close
+```
+
+3. 使用select处理多个channel
+
+场景:需要对多个通道进行同时处理，但只处理最先发生的channel时.
+
+select可以同时监控多个通道的情况，只处理未阻塞的case。当通道为nil时，对应的case永远为阻塞，无论读写。
+
+这里需要注意下特殊关注：普通情况下，对nil的通道写操作是要panic的。
+
+```go
+// 分配job时，如果收到关闭的通知则退出，不分配job
+func (h *Handler) handle(job *Job) {
+    select {
+    case h.jobCh<-m:
+        return 
+    case <-h.stopCh:
+        return
+    }
+}
+```
+
+4. 使用channel的声明控制读写权限
+
+场景:协程对某个通道只读或只写时.
+
+目的：
+
+* 使代码更易读、更易维护，
+* 防止只读协程对通道进行写数据，但通道已关闭，造成panic,
+
+通常如果协程对某个channel只有写操作，则这个channel声明为只写。如果协程对某个channel只有读操作，则这个channe声明为只读。
+```go
+// 只有generator进行对outCh进行写操作，返回声明
+// <-chan int，可以防止其他协程乱用此通道，造成隐藏bug
+func generator(int n) <-chan int {
+    outCh := make(chan int)
+    go func(){
+        for i:=0;i<n;i++{
+            outCh<-i
+        }
+    }()
+    return outCh
+}
+
+// consumer只读inCh的数据，声明为<-chan int
+// 可以防止它向inCh写数据
+func consumer(inCh <-chan int) {
+    for x := range inCh {
+        fmt.Println(x)
+    }
+}
+```
+
+5. 使用缓冲channel增强并发
+
+场景:异步
+
+有缓冲通道可供多个协程同时处理，在一定程度可提高并发性。
+
+```go
+// 无缓冲
+ch1 := make(chan int)
+ch2 := make(chan int, 0)
+// 有缓冲
+ch3 := make(chan int, 1)
+```
+
+```go 
+// 使用5个start协程同时处理输入数据
+func test() {
+    inCh := generator(100)
+    outCh := make(chan int, 10)
+
+    for i := 0; i < 5; i++ {
+        go start(inCh, outCh)
+    }
+
+    for r := range outCh {
+        fmt.Println(r)
+    }
+}
+
+func start(inCh <-chan int, outCh chan<- int) {
+    for v := range inCh {
+        outCh <- v * v
+    }
+}
+```
+
+6. 为操作加上超时
+
+场景:需要超时控制的操作.
+
+使用select和time.After，看操作和定时器哪个先返回，处理先完成的，就达到了超时控制的效果
+
+```go 
+func doWithTimeOut(timeout time.Duration) (int, error) {
+	select {
+	case ret := <-start():
+		return ret, nil
+	case <-time.After(timeout):
+		return 0, errors.New("timeout")
+	}
+}
+
+func start() <-chan int {
+	outCh := make(chan int)
+	go func() {
+		// do work
+	}()
+	return outCh
+}
+```
+
+7. 使用time实现channel无阻塞读写
+
+场景:并不希望在channel的读写上浪费时间.
+
+使用channel为操作加上超时的扩展，这里的操作是channel的读或写.
+```go 
+func unBlockRead(ch chan int) (x int, err error) {
+	select {
+	case x = <-ch:
+		return x, nil
+	case <-time.After(time.Microsecond):
+		return 0, errors.New("read time out")
+	}
+}
+
+func unBlockWrite(ch chan int, x int) (err error) {
+	select {
+	case ch <- x:
+		return nil
+	case <-time.After(time.Microsecond):
+		return errors.New("read time out")
+	}
+}
+```
+这里的time.After等待可以替换为default，则是channel阻塞时，立即返回的效果.
+
+8. 使用close(ch)关闭所有下游协程
+
+场景:退出时，显示通知所有协程退出.
+
+```go 
+func (h *Handler) Stop() {
+    close(h.stopCh)
+
+    // 可以使用WaitGroup等待所有协程退出
+}
+
+// 收到停止后，不再处理请求
+func (h *Handler) loop() error {
+    for {
+        select {
+        case req := <-h.reqCh:
+            go handle(req)
+        case <-h.stopCh:
+            return
+        }
+    }
+}
+```
+
+9. 使用chan struct{}作为信号channel
+
+场景:使用channel传递信号，而不是传递数据时.
+
+没数据需要传递时，传递空struct.
+
+```go 
+// 如果channel不需要传递任何数据,只是要给所有协程发送退出的信号
+type Handler struct {
+    stopCh chan struct{}
+    recevieCh chan *Request
+}
+```
+
+10. 使用channel传递结构体的指针而非结构体
+
+场景:使用channel传递结构体数据时.
+
+channel本质上传递的是数据的拷贝，拷贝的数据越小传输效率越高，传递结构体指针，比传递结构体更高效.
+
+```go
+// 效率高
+receiveCh chan *Request
+
+// 效率低
+receiveCh chan Request
+```
+
+11. 使用channel传递channel
+
+场景:使用场景有点多，通常是用来获取结果.
+
+channel可以用来传递变量，channel自身也是变量，可以传递自己。
+
+```go
+package main
+
+import (
+	"fmt"
+	"math/rand"
+	"sync"
+	"time"
+)
+
+func main() {
+	reqs := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+	// 存放结果的channel的channel
+	outs := make(chan chan int, len(reqs))
+	var wg sync.WaitGroup
+	wg.Add(len(reqs))
+	for _, x := range reqs {
+		o := handle(&wg, x)
+		outs <- o
+	}
+
+	go func() {
+		wg.Wait()
+		close(outs)
+	}()
+
+	// 读取结果，结果有序
+	for o := range outs {
+		fmt.Println(<-o)
+	}
+}
+
+// handle 处理请求，耗时随机模拟
+func handle(wg *sync.WaitGroup, a int) chan int {
+	out := make(chan int)
+	go func() {
+		time.Sleep(time.Duration(rand.Intn(3)) * time.Second)
+		out <- a
+		wg.Done()
+	}()
+	return out
+}
+```
+
+
+
+
+
+
+
