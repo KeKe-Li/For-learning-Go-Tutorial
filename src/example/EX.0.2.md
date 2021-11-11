@@ -595,10 +595,27 @@ func main() {
 }
 ```
 运行：
+
 ```bash
 1
 3
 2
 ```
 
+这里需要注意：defer语句一定要在函数return语句之前，这样才能生效。下面程序将会只输出1.
+
+```go
+func main() {
+    fmt.Println("1")
+    return 
+    fmt.Println("2")
+}
+```
+2. 在调用os.Exit时候，defer不会执行。下面程序只会输出2.
+
+func main() {
+    defer fmt.Println("1")
+    fmt.Println("2")
+    os.Exit(0)
+}
 
