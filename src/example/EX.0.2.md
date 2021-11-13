@@ -611,11 +611,46 @@ func main() {
     fmt.Println("2")
 }
 ```
-2. 在调用os.Exit时候，defer不会执行。下面程序只会输出2.
+* 在调用os.Exit时候，defer不会执行。下面程序只会输出2.
 
+```go
 func main() {
     defer fmt.Println("1")
     fmt.Println("2")
     os.Exit(0)
 }
+```
+
+* 可以同时设置多个defer函数
+* 
+可以设置多个defer函数，多个defer函数执行遵循FILO顺序，下面程序将依次输出2 4 3 1.
+
+
+```go
+func main() {
+    defer fmt.Println("1")
+    fmt.Println("2")
+    defer fmt.Println("3")
+    fmt.Println("4")
+}
+```
+
+针对下面的多个defer嵌套情况：
+```go
+func main() {
+    fmt.Println("1")
+    defer func() {
+       fmt.Println("2")
+       defer fmt.Println("3")
+       fmt.Println("4")
+    }()
+    
+    defer fmt.Println("5")
+    fmt.Println("6")
+}
+```
+那么上面的结果是：
+```bash
+1 6 5 2 4 3
+```
 
