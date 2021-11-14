@@ -654,3 +654,163 @@ func main() {
 1 6 5 2 4 3
 ```
 
+defer语句内部实现形式是一个结构体:
+```go
+type _defer struct {
+	...
+	sp        uintptr  // 函数栈指针,sp是stack pointor单词首字母缩写
+	pc        uintptr  //程序计数器, pc是program counter单词首字母缩写
+	fn        *funcval // 函数地址，执行defer函数
+	_panic    *_panic  // 指向最近一次panic
+	link      *_defer // 指向下一个_defer结构
+        ...
+}
+```
+defer内部实现是一个链表，链表元素类型是_defer结构体，其中的link字段指向下一个_defer地址，当定义一个defer语句时候，系统内部会将defer函数转换成_defer结构体，并放在链表头部，最后执行时候，系统会从链表头部开始依次执行，这也就是多个defer的执行顺序是First In Last out的原因。
+
+* defer函数的传入参数在定义时就已经明确
+
+defer函数的传入参数在定义时就已经明确，不论传入的参数是变量、表达式、函数语句，都会先计算出计算出实参结果，再随defer语句入栈
+
+```go
+func main() {
+  i := 1
+  defer fmt.Println(i)
+  i++
+  return
+}
+```
+运行：
+```go
+1
+```
+这里的程序输出1，而不是2.
+
+这里需要注意下：
+
+当defer类似闭包使用时候，访问的总是循环中最后一个值。
+
+```go
+func main() {
+    for i:=0; i<5; i++ {
+        defer func() {
+           fmt.Println(i) 
+        }()
+    }
+}
+
+```
+这样程序在连续输出5个5.
+
+因此呢，解决办法可将值传入闭包函数中，此时defer函数入栈时候，不光入栈地址，还会记录传入参数，等到执行的时候也就打印输出入栈时候的值。
+```go
+func main() {
+    for i:=0; i<5; i++ {
+        defer func(i int) {
+           fmt.Println(i) 
+        }(i)
+    }
+}
+```
+输出：
+
+```go
+4
+3 
+2
+1
+0
+```
+* 可以修改函数中的命名返回值
+
+```go
+func main() {
+    fmt.Println(test())
+}
+
+func test() (i int) {
+    defer func() {
+        i++
+    }()
+    return 100
+}
+```
+运行:
+```go
+100
+```
+程序输出101，执行return 100时候，会将100复制返回变量i，之后执行defer函数,i值会加1，此时i值变成101，最后函数test才会真正执行完成，所以打印输出为101.
+
+需要注意下这种匿名返回情况:
+
+```go
+func main() {
+    fmt.Println(test())
+}
+
+func test() int {
+    ret := 1                         
+    defer func() {
+        ret += 100           
+    }()               
+    return ret                  
+} 
+```
+
+这种匿名返回值的情况, 下面程序输出的1，而不是101。
+
+当执行test函数时候，系统会生成一个临时变量作为返回值变量，当执行到return ret时候，会将ret值复制给这个临时变量，此后defer函数对ret变量进行任何都和这个变量无关了，所以test函数最后返回值是1
+
+返回值是匿名指针类型的情况：
+
+```go
+func main() {
+    fmt.Println(*(test()))
+}
+
+func test() *int {
+    ret := 1                         
+    defer func() {                        
+        ret += 100           
+    }()               
+    return &ret                  
+} 
+```
+运行:
+```go
+101
+```
+* 多用于文件资源关闭，数据库等连接关闭
+
+处理资源释放回收
+
+通过defer我们可以简洁优雅处理资源回收问题，避免复杂的代码逻辑情况下，遗漏忽视相关的资源回收问题。
+```go
+ctx = gocontext.ContextWithLogger(ctx, log.New())
+ticker := time.NewTicker(1 * time.Second)
+defer ticker.Stop()
+for {
+	select {
+	case <-closing:
+		log.InfoContext(ctx, "info-stop")
+		return
+	case <-ticker.C:
+		impl.Run(ctx)
+	}
+}
+```
+* recover一起处理panic
+
+recover用户捕获panic异常，panic用于抛出异常。recover需要放在defer语句中，否则无法捕获到一次.
+
+```go
+func main() {
+    defer func() {
+        if r := recover(); r != nil {
+            fmt.Println(r)
+        }
+    }()
+    panic("it is panic")
+}
+```
+
