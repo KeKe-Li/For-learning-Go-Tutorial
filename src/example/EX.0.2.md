@@ -782,6 +782,7 @@ func test() *int {
 * 多用于文件资源关闭，数据库等连接关闭理资源释放回收.
 
 通过defer我们可以简洁优雅处理资源回收问题，避免复杂的代码逻辑情况下，遗漏忽视相关的资源回收问题。
+
 ```go
 ctx = gocontext.ContextWithLogger(ctx, log.New())
 ticker := time.NewTicker(1 * time.Second)
@@ -810,3 +811,4 @@ func main() {
     panic("it is panic")
 }
 ```
+
