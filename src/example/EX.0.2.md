@@ -493,7 +493,6 @@ type Handler struct {
     recevieCh chan *Request
 }
 ```
-
 10. 使用channel传递结构体的指针而非结构体
 
 场景:使用channel传递结构体数据时.
@@ -811,4 +810,4 @@ func main() {
     panic("it is panic")
 }
 ```
-
+defer的情况基本上就是上面这些，只要掌握方法，基本就很清楚了！
