@@ -493,7 +493,6 @@ type Handler struct {
     recevieCh chan *Request
 }
 ```
-
 10. 使用channel传递结构体的指针而非结构体
 
 场景:使用channel传递结构体数据时.
