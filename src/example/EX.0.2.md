@@ -810,4 +810,4 @@ func main() {
     panic("it is panic")
 }
 ```
-
+defer的情况基本上就是上面这些，只要掌握方法，基本就很清楚了！
