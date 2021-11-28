@@ -661,9 +661,10 @@ type _defer struct {
 	fn        *funcval // 函数地址，执行defer函数
 	_panic    *_panic  // 指向最近一次panic
 	link      *_defer // 指向下一个_defer结构
-        ...
+	...
 }
 ```
+
 defer内部实现是一个链表，链表元素类型是_defer结构体，其中的link字段指向下一个_defer地址，当定义一个defer语句时候，系统内部会将defer函数转换成_defer结构体，并放在链表头部，最后执行时候，系统会从链表头部开始依次执行，这也就是多个defer的执行顺序是First In Last out的原因。
 
 * defer函数的传入参数在定义时就已经明确
